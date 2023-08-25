@@ -1,0 +1,1 @@
+# banimo_diary
