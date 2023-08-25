@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form method="POST" action="diary/insert">
+  {% csrf_token %}
+  <table>
+    <tr>
+      <th class="detail-th">제목</th>
+      <td class="detail-td"><input type="text" class="detail-input" name="subject"></td>
+    </tr>
+    <tr>
+      <th>작성자</th>
+      <td>{{ request.session.name }}</td>
+    </tr>
+    <tr>
+      <th class="detail-th">내용</th>
+      <td class="detail-td"><textarea class="detail-textarea" name="content" id="diary_content" cols="80" rows="12" maxlength="400"></textarea></td>
+    </tr>
+    <tr><button type="submit">저장</button></tr>
+  </table>
+  </form>
+  {% if comments %}
+  {% for c in comments %}
+  <p>{{ c.commentor }} : {{ c.content }}    {{ c.create_date }}</p>
+  {% endfor %}
+  {% endif %}
+</body>
+</html>
