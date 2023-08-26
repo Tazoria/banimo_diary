@@ -1,9 +1,9 @@
 {% block content %}
 <div class="container">
-  <form method="post" action="users/login">
+  <form method="POST" action="">
     {% csrf_token %}
     <!-- 나중에 그냥 다 수직구조로 바꾸기 -->
-    <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
+
     <div class="forms-horizontal">
       <label for="userid">ID</label>
       <input type="text" class="form-control" name="userid" id="userid"
@@ -15,8 +15,8 @@
              value="{{ form.passwd.value|default_if_none:'' }}">
     </div>
     <div class="buttons-horizontal">
-      <button type="submit" class="bg-gradient">LOGIN</button>
-      <button type="button" class="bg-gradient" onclick="location.href='users/join'">JOIN</button>
+        <button type="submit" class="bg-gradient">LOGIN</button>
+        <a href="{% url 'accounts:join' %}">아이디가 없으신가요?</a>
     </div>
   </form>
 </div>

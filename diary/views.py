@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
-from diary.models import Diary
+from diary.models import Diary, Comment
 # from models.utils.Preprocess import Preprocessor
 from models.utils.load_tokenizer import load_tokenizer
 from models.transformer.transformer import transformer
@@ -67,19 +67,25 @@ def get_comment(content):
   if len(sentences) > 10:
     sentences = random.sample(sentences, 10)
 
-  comments = []
+  comments_from_model = []
   for sentence in sentences:
     evaluate = Evaluate(sentence.strip(), model, tokenizer)
-    comments.append(evaluate.predict())
+    comments_from_model.append(evaluate.predict())
 
-  writers = get_bani_names(len(sentences))
-  bani_act = get_bani_acts()
-  ramdom_comment = get_random_comments(len(sentences))
+  bani_acts = get_bani_acts()
+  random_comments = get_random_comments(len(comments_from_model))
+  commenters = get_bani_names(len(comments_from_model) + len(bani_acts) + len(random_comments))
 
+  comments = {
+    'commenter': commenters,
+    'comment': comments_from_model + random_comments + bani_acts
+  }
+
+  return comments
 
 
 def diary_list(request):
-  if request.session['id']:
+  if request.user.is_authenticated:
     page = request.GET.get('page', '1')
     items = Diary.objects.order_by('create_date')
 
@@ -88,16 +94,17 @@ def diary_list(request):
     max_index = len(paginator.page_range)
     context = {'items': page_obj, 'max_index': max_index, 'page': page}
 
+    print(request.user)
     return render(request, 'diary/list.html', context)
   else:
-    return redirect('users/login')
+    return redirect('accounts:login')
 
 
 def write(request):
-  if request.session['id']:
+  if request.user.is_authenticated:
     return render(request, 'diary/write.html')
   else:
-    return redirect('../')
+    return redirect('accounts:login')
 
 
 def detail(request, item_idx):
@@ -113,9 +120,17 @@ def insert(request):
     content=request.POST['content'])
   diary.save()
 
-  get_comment(request.POST['content'])
+  comments = get_comment(request.POST['content'])
 
-  return redirect('/diary')
+  for i in range(len(comments['comment'])):
+    comment = Comment(
+      diary_idx=diary.idx,
+      commenter=comments['commenter'],
+      content=comments['comment'],
+    )
+    comment.save()
+
+  return render(request, 'diary/list.html')
 
 
 # def test_insert(request):

@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 추가
     'diary',
-    'users',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +49,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             'templates',
-            'templates/users',
+          'templates/accounts',
             'templates/diary'
         ],
         'APP_DIRS': True,

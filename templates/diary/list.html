@@ -2,6 +2,7 @@
 {% load diary_filter %}
 {% block content %}
 <div class="container my-3">
+    <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
     <div class="row my-3">
         <div class="col-6">
             <a href="{% url 'diary:write' %}" class="btn btn-danger">일기쓰기</a>
