@@ -29,7 +29,7 @@ class Evaluate:
 
     # 입력 문장에 시작 토큰과 종료 토큰을 추가
     self.sentence = tf.expand_dims(
-        START_TOKEN + self.tokenizer.encode(sentence) + END_TOKEN, axis=0)
+        START_TOKEN + self.tokenizer.encode(self.sentence) + END_TOKEN, axis=0)
 
     output = tf.expand_dims(START_TOKEN, 0)
 
@@ -56,8 +56,8 @@ class Evaluate:
     prediction = self.evaluate()
     # prediction == 디코더가 리턴한 챗봇의 대답에 해당하는 정수 시퀀스
     # tokenizer.decode()를 통해 정수 시퀀스를 문자열로 디코딩.
-    predicted_sentence = tokenizer.decode(
-        [i for i in prediction if i < tokenizer.vocab_size])
+    predicted_sentence = self.tokenizer.decode(
+        [i for i in prediction if i < self.tokenizer.vocab_size])
 
     # print('Input: {}'.format(sentence))
     # print('Output: {}'.format(predicted_sentence))

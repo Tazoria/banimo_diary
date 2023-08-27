@@ -5,10 +5,9 @@ app_name = 'diary'
 
 urlpatterns = [
     path('', views.diary_list, name='list'),
+    path('<int:diary_idx>/', views.detail, name='detail'),
     path('write', views.write, name='write'),
-    path('detail', views.detail, name='detail'),
     path('insert', views.insert, name='insert'),
     path('update', views.update, name='update'),
     path('delete', views.delete, name='delete'),
-    path('test', views.test, name='test')
 ]

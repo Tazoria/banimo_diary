@@ -10,15 +10,15 @@
     </div>
     <table class="table">
         <tbody>
-        {% if items %}
-        {% for item in items %}
+        {% if diaries %}
+        {% for diary in diaries %}
         <tr class="text-center">
             <td class="text-start">
             <div>
-                {{ items.paginator.count|sub:items.start_index|sub:forloop.counter0|add:1 }} :
-                <a href="{% url 'diary:detail' %}">{{ item.subject }}</a>
-                {% if item.answer_set.count > 0 %}
-                <span class="text-danger small mx-2">{{ item.answer_set.count }}</span>
+                {{ diaries.paginator.count|sub:diaries.start_index|sub:forloop.counter0|add:1 }} :
+                <a href="{% url 'diary:detail' diary.idx %}">{{ diary.subject }}</a>
+                {% if diary.answer_set.count > 0 %}
+                <span class="text-danger small mx-2">{{ diary.answer_set.count }}</span>
                 {% endif %}
             </div>
             </td>

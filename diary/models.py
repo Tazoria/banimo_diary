@@ -14,7 +14,7 @@ class Diary(models.Model):
 
 class Comment(models.Model):
     idx = models.AutoField(primary_key=True)
-    diary_idx = models.ForeignKey('Diary', related_name='diary', on_delete=models.CASCADE, db_column='diary_idx')
+    diary_idx = models.ForeignKey('Diary', related_name='diary_idx', on_delete=models.CASCADE, db_column='diary_idx')
     commenter = models.CharField(max_length=20, blank=True, null=True)
     content = models.TextField(null=False)
     create_date = models.DateTimeField(auto_now=True)
