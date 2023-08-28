@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load diary_filter %}
 {% block content %}
+
 <div class="container my-3">
     <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
     <div class="row my-3">
@@ -12,29 +13,60 @@
         </div>
     </div>
     <table class="table">
-        <tbody>
-        {% if diaries %}
-        {% for diary in diaries %}
-        <tr class="text-center">
-            <td class="text-start">
-            <div>
-                {{ diaries.paginator.count|sub:diaries.start_index|sub:forloop.counter0|add:1 }} :
-                <a href="{% url 'diary:detail' diary.idx %}" style="text-decoration-line: none; color: #435334">{{ diary.subject }}</a>
-                {% if diary.answer_set.count > 0 %}
-                <span class="text-danger small mx-2">{{ diary.answer_set.count }}</span>
-                {% endif %}
-            </div>
-            <td style="color: #C8AE7D">{{ diary.create_date }}</td>
-            </td>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">작성일</th>
+          <th scope="col">제목</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+         {% if diaries %}
+         {% for diary in diaries %}
+        <tr>
+          <th scope="row">{{ diaries.paginator.count|sub:diaries.start_index|sub:forloop.counter0|add:1 }}</th>
+          <td>
+            <a href="{% url 'diary:detail' diary.idx %}" style="text-decoration-line: none; color: #435334">{{ diary.subject }}</a>
+            {% if diary.answer_set.count > 0 %}
+              <span class="text-danger small mx-2">{{ diary.answer_set.count }}</span>
+            {% endif %}
+          </td>
+          <td>{{ diary.create_date | date:'Y-m-d H:i' }}</td>
         </tr>
         {% endfor %}
         {% else %}
-        <tr>
-            <td colspan="4">작성하신 일기가 아직 없습니다.</td>
-        </tr>
+           <tr>
+             <td colspan="4">작성하신 일기가 아직 없습니다.</td>
+           </tr>
         {% endif %}
-        </tbody>
+      </tbody>
     </table>
+
+
+{#    <table class="table">#}
+{#        <tbody>#}
+{#        {% if diaries %}#}
+{#        {% for diary in diaries %}#}
+{#        <tr class="text-center">#}
+{#            <td class="text-start">#}
+{#            <div>#}
+{#                {{ diaries.paginator.count|sub:diaries.start_index|sub:forloop.counter0|add:1 }} :#}
+{#                <a href="{% url 'diary:detail' diary.idx %}" style="text-decoration-line: none; color: #435334">{{ diary.subject }}</a>#}
+{#                {% if diary.answer_set.count > 0 %}#}
+{#                <span class="text-danger small mx-2">{{ diary.answer_set.count }}</span>#}
+{#                {% endif %}#}
+{#            </div>#}
+{#            <td style="color: #C8AE7D">{{ diary.create_date }}</td>#}
+{#            </td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{#        {% else %}#}
+{#        <tr>#}
+{#            <td colspan="4">작성하신 일기가 아직 없습니다.</td>#}
+{#        </tr>#}
+{#        {% endif %}#}
+{#        </tbody>#}
+{#    </table>#}
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->

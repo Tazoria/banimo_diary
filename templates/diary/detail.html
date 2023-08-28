@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
+  <ul class="list-group list-group-horizontal d-flex justify-content-end align-items-start">
+    {% if diary.update_date %}
+    <li class="list-group-item">수정일: {{ diary.update_date }}</li>
+    {% endif %}
+{#    <li class="list-group-item">#}
+{#      <a href="{% url 'diary:update' diary.id %}">수정</a>#}
+{#    </li>#}
+    <li class="list-group-item">
+      <a href="{% url 'diary:delete' diary.idx %}">삭제</a>
+    </li>
+  </ul>
   <h2>일기</h2>
   <table>
     <tr>
@@ -15,21 +26,19 @@
       <td>{{ diary.create_date }}</td>
     </tr>
   </table>
-    <textarea rows="10" cols="100" readonly>{{ diary.content }}</textarea>
-{#    <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"#}
-{#       data-uri="{% url 'diary:delete' diary_idx %}">삭제</a>#}
-    <hr>
-    <table>
-        <tr>
-            <th style="font-size: 24px;">댓글</th>
-            <td><strong>{{ diary.diary_idx.count }}개</strong>의 댓글이 있습니다.</td>
-        </tr>
-        {% for comment in diary.diary_idx.all %}
-            <tr>
-                <th>{{ comment.commenter }}</th>
-                <td>{{ comment.content }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-
+  <label for="content"><strong>내용</strong></label>
+  <textarea id="content" rows="10" cols="100" readonly>{{ diary.content }}</textarea>
+  <hr>
+  <table>
+      <tr>
+          <th style="font-size: 24px;">댓글</th>
+          <td><strong>{{ diary.diary_idx.count }}개</strong>의 댓글이 있습니다.</td>
+      </tr>
+      {% for comment in diary.diary_idx.all %}
+          <tr>
+              <th>{{ comment.commenter }}</th>
+              <td>{{ comment.content }}</td>
+          </tr>
+      {% endfor %}
+  </table>
 {% endblock %}
