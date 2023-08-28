@@ -3,30 +3,33 @@
   <h2>일기</h2>
   <table>
     <tr>
-      <th>제목: </th>
+      <th>제목</th>
       <td>{{ diary.subject }}</td>
     </tr>
     <tr>
-      <th>글쓴이: </th>
+      <th>글쓴이</th>
       <td>{{ diary.writer }}</td>
     </tr>
     <tr>
-      <th>작성일자: </th>
+      <th>작성일자</th>
       <td>{{ diary.create_date }}</td>
     </tr>
-    <tr>
-      <th>내용: </th>
-      <td>{{ diary.content }}</td>
-    </tr>
   </table>
+    <textarea rows="10" cols="100" readonly>{{ diary.content }}</textarea>
 {#    <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"#}
 {#       data-uri="{% url 'diary:delete' diary_idx %}">삭제</a>#}
-  <h2>댓글</h2>
-    <h4>{{ diary.diary_idx.count }}개의 답변이 있습니다.</h4>
-    {% for comment in diary.diary_idx.all %}
-      <div class="comment">
-        <span style="font-weight: bold; font-size: larger">{{ comment.commenter }}</span>
-        <span>{{ comment.content }}</span>
-      </div>
-    {% endfor %}
+    <hr>
+    <table>
+        <tr>
+            <th style="font-size: 24px;">댓글</th>
+            <td><strong>{{ diary.diary_idx.count }}개</strong>의 댓글이 있습니다.</td>
+        </tr>
+        {% for comment in diary.diary_idx.all %}
+            <tr>
+                <th>{{ comment.commenter }}</th>
+                <td>{{ comment.content }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endblock %}

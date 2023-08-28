@@ -4,8 +4,11 @@
 <div class="container my-3">
     <input type="hidden" name="next" value="{{ next }}">  <!-- 로그인 성공후 이동되는 URL -->
     <div class="row my-3">
+        <div style="margin: 0 auto;">
+            <h2 style="color: #141E46;">안녕하세요, {{ user }}님!</h2>
+        </div>
         <div class="col-6">
-            <a href="{% url 'diary:write' %}" class="btn btn-danger">일기쓰기</a>
+            <a href="{% url 'diary:write' %}" class="btn btn-danger" style="background-color: #ED7B7B; border-color: #ED7B7B;">일기쓰기</a>
         </div>
     </div>
     <table class="table">
@@ -16,11 +19,12 @@
             <td class="text-start">
             <div>
                 {{ diaries.paginator.count|sub:diaries.start_index|sub:forloop.counter0|add:1 }} :
-                <a href="{% url 'diary:detail' diary.idx %}">{{ diary.subject }}</a>
+                <a href="{% url 'diary:detail' diary.idx %}" style="text-decoration-line: none; color: #435334">{{ diary.subject }}</a>
                 {% if diary.answer_set.count > 0 %}
                 <span class="text-danger small mx-2">{{ diary.answer_set.count }}</span>
                 {% endif %}
             </div>
+            <td style="color: #C8AE7D">{{ diary.create_date }}</td>
             </td>
         </tr>
         {% endfor %}
@@ -34,10 +38,10 @@
     <!-- 페이징처리 시작 -->
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
-        {% if items.has_previous %}
+        {% if diaries.has_previous %}
         <li class="page-item">
-            <!-- <a class="page-link" href="?page={{ items.previous_page_number }}">이전</a> -->
-            <a class="page-link" data-page="{{ items.previous_page_number }}"
+            <!-- <a class="page-link" href="?page={{ diaries.previous_page_number }}">이전</a> -->
+            <a class="page-link text-dark" data-page="{{ diaries.previous_page_number }}"
            href="javascript:void(0)">이전</a>
         </li>
         {% else %}
@@ -46,26 +50,23 @@
         </li>
         {% endif %}
         <!-- 페이지리스트 -->
-        {% for page_number in items.paginator.page_range %}
-        {% if page_number >= items.number|add:-5 and page_number <= items.number|add:5 %}
-        {% if page_number == items.number %}
+        {% for page_number in diaries.paginator.page_range %}
+        {% if page_number >= diaries.number|add:-5 and page_number <= diaries.number|add:5 %}
+        {% if page_number == diaries.number %}
         <li class="page-item active" aria-current="page">
-            <a class="page-link" data-page="{{ page_number }}" href="javascript:void(0)">{{ page_number }}</a>
-            <!-- <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> -->
+            <a class="page-link text-white" style="border-color: transparent; background-color: #9ED2BE;" href="?page={{ page_number }}">{{ page_number }}</a>
         </li>
         {% else %}
         <li class="page-item">
-            <a class="page-link" data-page="{{ page_number }}" href="javascript:void(0)">{{ page_number }}</a>
-            <!-- <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> -->
+            <a class="page-link text-dark" href="?page={{ page_number }}">{{ page_number }}</a>
         </li>
         {% endif %}
         {% endif %}
         {% endfor %}
         <!-- 다음페이지 -->
-        {% if items.has_next %}
+        {% if diaries.has_next %}
         <li class="page-item">
-            <a class="page-link" data-page="{{ items.next_page_number }}" href="javascript:void(0)">다음</a>
-            <!-- <a class="page-link" href="?page={{ items.next_page_number }}">다음</a> -->
+            <a class="page-link text-dark" data-page="{{ diaries.next_page_number }}" href="javascript:void(0)">다음</a>
         </li>
         {% else %}
         <li class="page-item disabled">

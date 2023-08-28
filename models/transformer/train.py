@@ -1,4 +1,5 @@
 import tensorflow as tf
+from models.transformer.transformer import transformer
 
 
 class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
@@ -24,8 +25,8 @@ class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
     return config
 
 
-def loss_function(y_true, y_pred, max_length):
-  y_true = tf.reshape(y_true, shape=(-1, max_length - 1))
+def loss_function(y_true, y_pred, max_length=43):
+  y_true = tf.reshape(y_true, shape=(-1, max_length-1))
 
   loss = tf.keras.losses.SparseCategoricalCrossentropy(
     from_logits=True, reduction='none')(y_true, y_pred)
@@ -36,9 +37,9 @@ def loss_function(y_true, y_pred, max_length):
   return tf.reduce_mean(loss)
 
 
-def accuracy(y_true, y_pred, max_length):
+def accuracy(y_true, y_pred, max_length=43):
   # 레이블의 크기는 (batch_size, MAX_LENGTH - 1)
-  y_true = tf.reshape(y_true, shape=(-1, max_length - 1))
+  y_true = tf.reshape(y_true, shape=(-1, max_length-1))
   return tf.keras.metrics.sparse_categorical_accuracy(y_true, y_pred)
 
 
@@ -59,7 +60,7 @@ def get_model(vocab_size, num_layers=2, dff=512, d_model=256, num_heads=8, dropo
   return model
 
 
-def train_model(model, dataset, epochs=50, mini_epoch=10):
+def train_model_simple(model, dataset, epochs=50, mini_epoch=10):
   early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
   total_epoch = 0
   tf.keras.backend.clear_session()

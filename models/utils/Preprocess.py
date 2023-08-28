@@ -7,7 +7,7 @@ import os
 class Preprocessor:
   def __init__(self):
     self.tokenizer = None
-    self.MAX_LENGTH = 0
+    self.MAX_LENGTH = 43
     self.START_TOKEN = []
     self.END_TOKEN = []
 
@@ -50,9 +50,9 @@ class Preprocessor:
 
     return self.tokenizer
 
-  def tokenize_and_filter(self, inputs, outputs):
+  def tokenize_and_filter(self, inputs, outputs, tokenizer):
     tokenized_inputs, tokenized_outputs = [], []
-
+    self.tokenizer = tokenizer
     for (sentence1, sentence2) in zip(inputs, outputs):
       # encode(토큰화 + 정수 인코딩), 시작 토큰과 종료 토큰 추가
       sentence1 = self.START_TOKEN + self.tokenizer.encode(sentence1) + self.END_TOKEN

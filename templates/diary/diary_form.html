@@ -15,7 +15,11 @@
             <textarea class="form-control" name="content"
                       id="content" rows="10">{{ form.content.value|default_if_none:'' }}</textarea>
         </div>
-        <button type="submit" class="btn btn-danger">저장하기</button>
+        <button type="submit" class="btn btn-danger" onclick="document.getElementById('wait').style.display='block'">저장하기</button>
+        <p id="wait" style="display: none;">바니들이 당신의 일기를 읽는데 시간이 조금 걸립니다! 조금만 기다려주세요...</p>
     </form>
 </div>
+<script>
+
+</script>
 {% endblock %}
