@@ -61,8 +61,8 @@ class Evaluate:
 
     # print('Input: {}'.format(sentence))
     # print('Output: {}'.format(predicted_sentence))
-    predicted_sentence.replace("'", '').replace('_', ' ')
-    return predicted_sentence
+
+    return predicted_sentence.replace("'", '').replace('_', ' ')
 
 
 if __name__ == '__main__':
