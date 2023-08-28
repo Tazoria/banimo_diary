@@ -22,14 +22,15 @@ class Preprocessor:
     # print('reg_sentence: return(preprocessed) > ', sentences[:5])
     return sentences
 
-  def get_tokenizer(self, questions, answers, target_vocab_size=2 ** 13):
+  def get_tokenizer(self, sentence_list, target_vocab_size=2 ** 13):
+    sentence_list = self.seperate_punctuation_train(sentence_list)
     self.tokenizer = tfds.deprecated.text.SubwordTextEncoder.build_from_corpus(
-      questions + answers, target_vocab_size=target_vocab_size)
+      sentence_list, target_vocab_size=target_vocab_size)
 
-    self.tokenizer.save_to_file('vocab')
+    self.tokenizer.save_to_file(f'vocab_{target_vocab_size}')
 
     corpus = []
-    vocab_path = 'vocab.subwords'
+    vocab_path = f'vocab_{target_vocab_size}.subwords'
     with open(vocab_path, 'r', encoding='utf-8') as f:
       for inx, line in enumerate(f):
         if inx > 1:
