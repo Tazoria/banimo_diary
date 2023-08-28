@@ -7,6 +7,7 @@ class Diary(models.Model):
     subject = models.CharField(max_length=200)
     content = models.TextField(null=False)
     create_date = models.DateTimeField(auto_now=True)
+    update_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.subject
