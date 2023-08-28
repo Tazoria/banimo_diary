@@ -5,22 +5,22 @@ import re
 
 
 class Evaluate:
-  def __init__(self, sentence, model, tokenizer):
-    self.sentence = sentence
+  def __init__(self, model, tokenizer):
+    self.sentence = ''
     self.tokenizer = tokenizer
     self.model = model
 
-  def preprocess_sentence(self):
+  def preprocess_sentence(self, sentence):
     # 단어와 구두점 사이에 공백 추가.
     # ex) 12시 땡! -> 12시 땡 !
-    self.sentence = re.sub(r"([?.!,])", r" \1 ", self.sentence)
+    self.sentence = re.sub(r"([?.!,])", r" \1 ", sentence)
     self.sentence = self.sentence.strip()
 
     return self.sentence
 
-  def evaluate(self):
+  def evaluate(self, sentence):
     # 입력 문장에 대한 전처리
-    self.sentence = self.preprocess_sentence()
+    self.sentence = self.preprocess_sentence(sentence)
 
     START_TOKEN, END_TOKEN = [self.tokenizer.vocab_size], [self.tokenizer.vocab_size + 1]
 
@@ -52,8 +52,8 @@ class Evaluate:
   # 단어 예측이 모두 끝났다면 output을 리턴.
     return tf.squeeze(output, axis=0)
 
-  def predict(self):
-    prediction = self.evaluate()
+  def predict(self, sentence):
+    prediction = self.evaluate(sentence)
     # prediction == 디코더가 리턴한 챗봇의 대답에 해당하는 정수 시퀀스
     # tokenizer.decode()를 통해 정수 시퀀스를 문자열로 디코딩.
     predicted_sentence = self.tokenizer.decode(
@@ -68,7 +68,7 @@ class Evaluate:
 if __name__ == '__main__':
   # vocab_path = r'D:\banimo_diary\models\vocab.txt'
   vocab_path = r'../vocab.txt'
-  sentence = '오늘 공부가 잘 안됐어. 그래서 신나게 놀았어. 참 재미있었어'
+  sample_sentence = '오늘 공부가 잘 안됐어. 그래서 신나게 놀았어. 참 재미있었어'
   model_path = r'../save/weights/transformer_weight150.h5'
 
   tokenizer = load_tokenizer(vocab_path)
@@ -81,8 +81,8 @@ if __name__ == '__main__':
     dropout=.1)
   model.load_weights(model_path)
 
-  evaluate = Evaluate(sentence, model, tokenizer)
-  output = evaluate.predict()
+  evaluate = Evaluate(model, tokenizer)
+  output = evaluate.predict(sample_sentence)
 
-  print('input > ', sentence)
+  print('input > ', sample_sentence)
   print('output > ', output)
