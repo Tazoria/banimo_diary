@@ -11,3 +11,4 @@ models/data/
 .idea
 __pycache__/
 models/save/weights/transformer_weight420.h5
+models/save/weights/transformer_weight_vocab_31960_layers_8_epochs_40.h5
