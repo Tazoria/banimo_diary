@@ -1,8 +1,9 @@
+import time
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from diary.models import Diary
 from diary.forms import DiaryForm
-# from models.utils.Preprocess import Preprocessor
 from models.utils.load_tokenizer import load_tokenizer
 from models.transformer.transformer import transformer
 from models.transformer.evaluate import Evaluate
@@ -24,9 +25,12 @@ def get_bani_names(num_comments):
 
 
 def get_random_comments(num_sentences):
-  random_comments = pd.read_excel(r'D:\banimo_diary\data\bani_random_sentences.xlsx')
+  random_comments = pd.read_excel(r'D:\banimo_diary\data\bani_random_sentences.xlsx').fillna(0)
   sentence = [word for word in random_comments['문장'].to_list() if word]
   punctuation = [word for word in random_comments['문장부호'].to_list() if word]
+
+  print(sentence)
+  print(punctuation)
 
   if num_sentences <= 5:
     num_random_comments = random.randint(2, 4)
@@ -55,16 +59,16 @@ def get_bani_acts():
 
 
 def get_comment(content):
-  vocab_path = r'D:\banimo_diary\models\vocab.txt'
-  model_path = r'D:\banimo_diary\models\save\weights\transformer_weight420.h5'
+  vocab_path = r'D:\banimo_diary\models\vocab_32000.txt'
+  model_path = r'D:\banimo_diary\models\save\weights\transformer_weight_vocab_31960_layers_8_epochs_40.h5'
   tokenizer = load_tokenizer(vocab_path)
 
   model = transformer(vocab_size=tokenizer.vocab_size + 2,
-                      num_layers=2,
+                      num_layers=4,
                       dff=512,
                       d_model=256,
                       num_heads=8,
-                      dropout=.1)
+                      dropout=.2)
   model.load_weights(model_path)
 
   sentences = [content.split('.') for content in content.split('\n')]
@@ -121,11 +125,6 @@ def detail(request, diary_idx):
 
 def insert(request):
   if request.method == 'POST':
-    # diary = Diary(
-    #   subject=request.POST['subject'],
-    #   writer=request.session['name'],
-    #   content=request.POST['content'])
-    # diary.save()
     form = DiaryForm(request.POST)
     if form.is_valid():
       diary = form.save(commit=False)
@@ -135,12 +134,6 @@ def insert(request):
 
       comments = get_comment(request.POST['content'])
       for i in range(len(comments['comment'])):
-        # comment = Comment(
-        #   diary_idx=diary,
-        #   commenter=comments['commenter'][i],
-        #   content=comments['comment'][i],
-        # )
-        # comment.save()
         idx = diary.idx
         diary = get_object_or_404(Diary, pk=idx)
         diary.diary_idx.create(content=comments['comment'][i], commenter=comments['commenter'][i])
@@ -150,19 +143,32 @@ def insert(request):
     return render(request, 'diary/diary_form.html')
 
 
-def update(request):
-  diary = Diary(
-    idx=request.POST['idx'],
-    subject=request.POST['subject'],
-    writer=request.POST['name'],
-    create_date=request.POST['create_date'],
-    content=request.POST['content'])
-  diary.save()
-  get_comment(request)
-  return redirect('/detail')
+# def update(request):
+#   if request.method == 'POST':
+#     form = DiaryForm(request.POST, instance=diary)
+#     if form.is_valid():
+#       diary = form.save(commit=False)
+#       diary.modify_date = time.time()
+#       diary.save()
+#       print(diary.subject, ' 저장 성공')
+#       return redirect('diary:detail', diary_idx=diary_idx)
+#   else:
+#     return render(request, 'diary/diary_form.html')
+#     # diary = Diary(
+#     #   idx=request.POST['idx'],
+#     #   subject=request.POST['subject'],
+#     #   writer=request.user.username,
+#     #   create_date=request.POST['create_date'],
+#     #   update_date=time.time.now(),
+#     #   content=request.POST['content'])
+#     # diary.save()
 
 
 def delete(request, diary_idx):
-  Diary.objects.get(diary_idx=request.POST['idx']).delete()
-  return redirect('/diary')
+  diary = get_object_or_404(Diary, pk=diary_idx)
+  if request.user != diary.author:
+    messages.error(request, '삭제권한이 없습니다')
+    return redirect('diary:detail', diary_idx=diary.idx)
+  diary.delete()
+  return redirect('diary:list')
 
