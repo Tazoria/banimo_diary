@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-  <ul class="list-group list-group-horizontal d-flex justify-content-end align-items-start">
-    {% if diary.update_date %}
-    <li class="list-group-item">수정일: {{ diary.update_date }}</li>
-    {% endif %}
+{#  <ul class="list-group list-group-horizontal d-flex justify-content-end align-items-start">#}
+{#    {% if diary.update_date %}#}
+{#    <li class="list-group-item">수정일: {{ diary.update_date }}</li>#}
+{#    {% endif %}#}
 {#    <li class="list-group-item">#}
 {#      <a href="{% url 'diary:update' diary.id %}">수정</a>#}
 {#    </li>#}
     <li class="list-group-item">
-      <a href="{% url 'diary:delete' diary.idx %}">삭제</a>
+{#      <a href="{% url 'diary:delete' diary.idx %}">삭제</a>#}
     </li>
   </ul>
   <h2>일기</h2>

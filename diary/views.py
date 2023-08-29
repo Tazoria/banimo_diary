@@ -25,12 +25,9 @@ def get_bani_names(num_comments):
 
 
 def get_random_comments(num_sentences):
-  random_comments = pd.read_excel(r'D:\banimo_diary\data\bani_random_sentences.xlsx').fillna(0)
+  random_comments = pd.read_excel(r'D:\banimo_diary\models\data\bani_random_comments.xlsx').fillna(0)
   sentence = [word for word in random_comments['문장'].to_list() if word]
   punctuation = [word for word in random_comments['문장부호'].to_list() if word]
-
-  print(sentence)
-  print(punctuation)
 
   if num_sentences <= 5:
     num_random_comments = random.randint(2, 4)
@@ -45,7 +42,7 @@ def get_random_comments(num_sentences):
 
 
 def get_bani_acts():
-  bani_acts = pd.read_excel(r'D:\banimo_diary\data\bani_acts.xlsx').fillna(0)
+  bani_acts = pd.read_excel(r'D:\banimo_diary\models\data\bani_acts.xlsx').fillna(0)
 
   place = [word for word in bani_acts['어디서'].to_list() if word]
   how = [word for word in bani_acts['어떻게'].to_list() if word]
@@ -60,7 +57,7 @@ def get_bani_acts():
 
 def get_comment(content):
   vocab_path = r'D:\banimo_diary\models\vocab_32000.txt'
-  model_path = r'D:\banimo_diary\models\save\weights\transformer_weight_vocab_31960_layers_8_epochs_40.h5'
+  model_path = r'D:\banimo_diary\models\save\weights\transformer_weight_vocab_31960_layers_4_epochs_110.h5'
   tokenizer = load_tokenizer(vocab_path)
 
   model = transformer(vocab_size=tokenizer.vocab_size + 2,
@@ -164,11 +161,11 @@ def insert(request):
 #     # diary.save()
 
 
-def delete(request, diary_idx):
-  diary = get_object_or_404(Diary, pk=diary_idx)
-  if request.user != diary.author:
-    messages.error(request, '삭제권한이 없습니다')
-    return redirect('diary:detail', diary_idx=diary.idx)
-  diary.delete()
-  return redirect('diary:list')
+# def delete(request, diary_idx):
+#   diary = get_object_or_404(Diary, pk=diary_idx)
+#   if request.user != diary.author:
+#     messages.error(request, '삭제권한이 없습니다')
+#     return redirect('diary:detail', diary_idx=diary.idx)
+#   diary.delete()
+#   return redirect('diary:list')
 
