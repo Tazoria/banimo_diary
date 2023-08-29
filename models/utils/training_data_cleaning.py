@@ -151,8 +151,6 @@ if __name__ == '__main__':
     valid = get_data(valid_js)
     valid_clear = make_clear(valid)
 
-
-
     # 데이터를 source와 target으로 파일을 분리해 따로 구성할 때
     train_src = train_clear['Q']
     train_tgt = train_clear['A']
