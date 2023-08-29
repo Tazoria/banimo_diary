@@ -59,8 +59,8 @@ class Evaluate:
     predicted_sentence = self.tokenizer.decode(
         [i for i in prediction if i < self.tokenizer.vocab_size])
 
-    # print('Input: {}'.format(sentence))
-    # print('Output: {}'.format(predicted_sentence))
+    print('Input: {}'.format(sentence))
+    print('Output: {}'.format(predicted_sentence))
 
     return predicted_sentence.replace("'", '').replace('_', ' ')
 
