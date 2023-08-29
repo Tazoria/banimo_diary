@@ -66,8 +66,8 @@ class Evaluate:
 
 
 if __name__ == '__main__':
-  # vocab_path = r'D:\banimo_diary\models\vocab.txt'
-  vocab_path = r'vocab.txt'
+  # vocab_path = r'D:\banimo_diary\models\vocab_32000.txt'
+  vocab_path = r'vocab_32000.txt'
   sample_sentence = '오늘 공부가 잘 안됐어. 그래서 신나게 놀았어. 참 재미있었어'
   model_path = r'../save/weights/transformer_weight150.h5'
 

@@ -35,7 +35,7 @@ class Preprocessor:
       for inx, line in enumerate(f):
         if inx > 1:
           corpus.append(line.strip())
-    # 헤더 정보가 포함된 열 두개를 토크나이저 로드시에 제외하기 때문에 추가해줌
+    # 헤더 정보가 포함된 열 두개를 토크나이저 로드시에 제외하기 때문에 추가
     corpus.insert(0, '')
     corpus.insert(0, '')
 

@@ -103,21 +103,14 @@ class MultiHeadAttention(tf.keras.layers.Layer):
     batch_size = tf.shape(query)[0]
 
     # 1. WQ, WK, WV에 해당하는 밀집층 지나기
-    # q : (batch_size, query의 문장 길이, d_model)
-    # k : (batch_size, key의 문장 길이, d_model)
-    # v : (batch_size, value의 문장 길이, d_model)
-    # 참고) 인코더(k, v)-디코더(q) 어텐션에서는 query 길이와 key, value의 길이는 다를 수 있다.
-    query = self.query_dense(query)
-    key = self.key_dense(key)
-    value = self.value_dense(value)
+    query = self.query_dense(query)  # q : (batch_size, query의 문장 길이, d_model)
+    key = self.key_dense(key)  # k : (batch_size, key의 문장 길이, d_model)
+    value = self.value_dense(value)  # v : (batch_size, value의 문장 길이, d_model)
 
     # 2. 헤드 나누기
-    # q : (batch_size, num_heads, query의 문장 길이, d_model/num_heads)
-    # k : (batch_size, num_heads, key의 문장 길이, d_model/num_heads)
-    # v : (batch_size, num_heads, value의 문장 길이, d_model/num_heads)
-    query = self.split_heads(query, batch_size)
-    key = self.split_heads(key, batch_size)
-    value = self.split_heads(value, batch_size)
+    query = self.split_heads(query, batch_size)  # q : (batch_size, num_heads, query의 문장 길이, d_model/num_heads)
+    key = self.split_heads(key, batch_size)  # k : (batch_size, num_heads, key의 문장 길이, d_model/num_heads)
+    value = self.split_heads(value, batch_size)  # v : (batch_size, num_heads, value의 문장 길이, d_model/num_heads)
 
     # 3. 스케일드 닷 프로덕트 어텐션. 앞서 구현한 함수 사용.
     # (batch_size, num_heads, query의 문장 길이, d_model/num_heads)
@@ -294,15 +287,11 @@ def decoder(vocab_size, num_layers, dff,
       name=name)
 
 
-def transformer(vocab_size, num_layers, dff,
-                d_model, num_heads, dropout,
+def transformer(vocab_size, num_layers, dff, d_model, num_heads, dropout,
                 name="transformer"):
 
-  # 인코더의 입력
-  inputs = tf.keras.Input(shape=(None,), name="inputs")
-
-  # 디코더의 입력
-  dec_inputs = tf.keras.Input(shape=(None,), name="dec_inputs")
+  inputs = tf.keras.Input(shape=(None,), name="inputs")  # 인코더의 입력
+  dec_inputs = tf.keras.Input(shape=(None,), name="dec_inputs")  # 디코더의 입력
 
   # 인코더의 패딩 마스크
   enc_padding_mask = tf.keras.layers.Lambda(
@@ -319,12 +308,12 @@ def transformer(vocab_size, num_layers, dff,
       create_padding_mask, output_shape=(1, 1, None),
       name='dec_padding_mask')(inputs)
 
-  # 인코더의 출력은 enc_outputs. 디코더로 전달된다.
+  # 인코더의 출력은 enc_outputs. 디코더로 전달
   enc_outputs = encoder(vocab_size=vocab_size, num_layers=num_layers, dff=dff,
       d_model=d_model, num_heads=num_heads, dropout=dropout,
   )(inputs=[inputs, enc_padding_mask]) # 인코더의 입력은 입력 문장과 패딩 마스크
 
-  # 디코더의 출력은 dec_outputs. 출력층으로 전달된다.
+  # 디코더의 출력은 dec_outputs. 출력층으로 전달
   dec_outputs = decoder(vocab_size=vocab_size, num_layers=num_layers, dff=dff,
       d_model=d_model, num_heads=num_heads, dropout=dropout,
   )(inputs=[dec_inputs, enc_outputs, look_ahead_mask, dec_padding_mask])
