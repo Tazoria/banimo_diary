@@ -74,11 +74,11 @@ if __name__ == '__main__':
   tokenizer = load_tokenizer(vocab_path)
   model = transformer.transformer(
     vocab_size=tokenizer.vocab_size + 2,
-    num_layers=2,
+    num_layers=4,
     dff=512,
     d_model=256,
     num_heads=8,
-    dropout=.1)
+    dropout=.2)
   model.load_weights(model_path)
 
   evaluate = Evaluate(model, tokenizer)
