@@ -135,12 +135,12 @@ def make_clear(df):
 
 if __name__ == '__main__':
     # JSON파일을 읽어와 필요한 데이터들을 데이터프레임으로 구성
-    with open('banimo_diary/models/data/sentiment_training.json', encoding='utf-8') as f:
+    with open('../data/sentiment_training.json', encoding='utf-8') as f:
         train_js = json.loads(f.read())
-    with open('banimo_diary/models/data/sentiment_validation.json', encoding='utf-8') as f:
+    with open('../data/sentiment_validation.json', encoding='utf-8') as f:
         valid_js = json.loads(f.read())
 
-    chatbot_data = pd.read_csv('./data/ChatbotData.csv', encoding='utf-8')
+    chatbot_data = pd.read_csv('../data/ChatbotData.csv', encoding='utf-8')
 
     # 데이터를 보기 편하게 바꾸기
     # train 데이터
@@ -157,11 +157,12 @@ if __name__ == '__main__':
     valid_src = valid_clear['Q']
     valid_tgt = valid_clear['A']
 
-    train_clear.to_csv('./data/clear_data.csv', index=False)
-    train_src.to_csv(f'./data/train_src.txt', sep='\n', header=False, index=False, encoding='utf-8')
-    train_tgt.to_csv(f'./data/train_tgt.txt', sep='\n', header=False, index=False, encoding='utf-8')
-    valid_src.to_csv(f'./data/valid_src.txt', sep='\n', header=False, index=False, encoding='utf-8')
-    valid_tgt.to_csv(f'./data/valid_tgt.txt', sep='\n', header=False, index=False, encoding='utf-8')
+    train_clear.to_csv('../data/clear_data.csv', index=False)
+    valid_clear.to_csv('../data/clear_data.csv', index=False)
+    train_src.to_csv('../data/train_src.txt', sep='\n', header=False, index=False, encoding='utf-8')
+    train_tgt.to_csv('../data/train_tgt.txt', sep='\n', header=False, index=False, encoding='utf-8')
+    valid_src.to_csv('../data/valid_src.txt', sep='\n', header=False, index=False, encoding='utf-8')
+    valid_tgt.to_csv('../data/valid_tgt.txt', sep='\n', header=False, index=False, encoding='utf-8')
 
     chatbot_data = pd.concat([chatbot_data, train_clear[['Q', 'A', 'label']]])
     chatbot_data.to_csv('./data/ChatbotData_merged.csv', index=False, encoding='utf-8')
