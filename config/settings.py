@@ -120,7 +120,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')  # 개발자가 폴더 위치 지정해줘야함
+    Path('D:/banimo_diary/static')  # 개발자가 폴더 위치 지정해줘야함
 ]
 # # 각 앱마다 static 파일을 따로 관리하고자 할 때 배포 시 각 파일들을 해당위치에 모아줌
 # STATIC_ROOT = os.path.join('staticfiles')
