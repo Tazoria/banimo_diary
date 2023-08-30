@@ -12,7 +12,7 @@ def load_tokenizer(vocab_path):
 
 
 if __name__ == '__main__':
-  vocab_path = r'D:\banimo_diary\models\vocab_32000.txt'
+  vocab_path = '../transformer/vocab_32000.txt'
   tokenizer = load_tokenizer(vocab_path)
   encoded = tokenizer.encode('안녕 나는 타조랑말코딱지야')
   decoded = tokenizer.decode(encoded)
