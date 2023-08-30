@@ -157,13 +157,13 @@ if __name__ == '__main__':
     valid_src = valid_clear['Q']
     valid_tgt = valid_clear['A']
 
-    train_clear.to_csv('../data/clear_data.csv', index=False)
-    valid_clear.to_csv('../data/clear_data.csv', index=False)
+    train_clear.to_csv('../data/train_clear.csv', index=False)
+    valid_clear.to_csv('../data/valid_clear.csv', index=False)
     train_src.to_csv('../data/train_src.txt', sep='\n', header=False, index=False, encoding='utf-8')
     train_tgt.to_csv('../data/train_tgt.txt', sep='\n', header=False, index=False, encoding='utf-8')
     valid_src.to_csv('../data/valid_src.txt', sep='\n', header=False, index=False, encoding='utf-8')
     valid_tgt.to_csv('../data/valid_tgt.txt', sep='\n', header=False, index=False, encoding='utf-8')
 
     chatbot_data = pd.concat([chatbot_data, train_clear[['Q', 'A', 'label']]])
-    chatbot_data.to_csv('./data/ChatbotData_merged.csv', index=False, encoding='utf-8')
+    chatbot_data.to_csv('../data/ChatbotData_merged.csv', index=False, encoding='utf-8')
 
