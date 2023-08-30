@@ -11,8 +11,6 @@ import pandas as pd
 import random
 import itertools
 # import re
-
-
 def get_bani_names(num_comments):
   banies = ['검은바니', '흰 바니', '분홍 바니', '무지개 바니', '노랑 바니',
             '초코 바니', '연두 바니', '모찌 바니', '회색 바니', '하늘 바니',
@@ -24,9 +22,9 @@ def get_bani_names(num_comments):
 
   return bani_names
 
-
+# r'D:\banimo_diary\models\data\bani_random_comments.xlsx'
 def get_random_comments(num_sentences):
-  random_comments = pd.read_excel(r'D:\banimo_diary\models\data\bani_random_comments.xlsx').fillna(0)
+  random_comments = pd.read_excel('models/data/bani_random_comments.xlsx').fillna(0)
   # 결측치 제외한 나머지 값들을 담은 리스트 생성
   sentence = [word for word in random_comments['문장'].to_list() if word]
   punctuation = [word for word in random_comments['문장부호'].to_list() if word]
@@ -47,7 +45,7 @@ def get_random_comments(num_sentences):
 
 
 def get_bani_acts():
-  bani_acts = pd.read_excel(r'D:\banimo_diary\models\data\bani_acts.xlsx').fillna(0)
+  bani_acts = pd.read_excel('models/data/bani_acts.xlsx').fillna(0)
 
   # 결측치 제외한 나머지 값들을 담은 리스트 생성
   place = [word for word in bani_acts['어디서'].to_list() if word]
@@ -64,8 +62,8 @@ def get_bani_acts():
 
 def get_comment(content):
   # 저장된 트랜스포머 모델의 가중치를 적용하기 위해 단어사전과 모델 가중치의 경로 불러오기
-  vocab_path = r'D:\banimo_diary\models\vocab_32000.txt'
-  model_path = r'D:\banimo_diary\models\save\weights\transformer_weight_vocab_31960_layers_4_epochs_110.h5'
+  vocab_path = 'models/transformer/vocab_32000.txt'
+  model_path = 'models/save/weights/transformer_weight_vocab_31960_layers_4_epochs_110.h5'
 
   tokenizer = load_tokenizer(vocab_path)  # 토크나이저 생성
 
@@ -78,8 +76,11 @@ def get_comment(content):
   model.load_weights(model_path)  # 가중치 불러오기
 
   # 입력 받은 문단을 문장으로 자르기
-  sentences = [content.split('.') for content in content.split('\n')]
-  sentences = list(itertools.chain(*sentences))  # 1차원 배열로 구성
+  sentences = content.replace('\r', '-').replace('\n', '-').replace('.', '-')
+  sentences = sentences.split('-')
+  sentences = [sentence for sentence in sentences if sentence]
+  print(sentences)
+
   if len(sentences) > 10:  # 문장 수가 10개가 넘으면 그 중에서 10개만 랜덤 추출
     sentences = random.sample(sentences, 10)
 
