@@ -22,13 +22,16 @@ class Preprocessor:
     # print('reg_sentence: return(preprocessed) > ', sentences[:5])
     return sentences
 
+  # 저장된 토크나이저 없는 경우 - source 데이터와 target 데이터를 모두 넣어 단어사전 생성
   def get_tokenizer(self, sentence_list, target_vocab_size=2 ** 13):
+    # 전처리
     sentence_list = self.seperate_punctuation_train(sentence_list)
     self.tokenizer = tfds.deprecated.text.SubwordTextEncoder.build_from_corpus(
       sentence_list, target_vocab_size=target_vocab_size)
 
     self.tokenizer.save_to_file(f'vocab_{target_vocab_size}')
 
+    # SubwordTextEncoder는 utf-8 변환이 되지 않으면 에러 발생하므로 파일을 열어 utf-8파일로 변경해주기
     corpus = []
     vocab_path = f'vocab_{target_vocab_size}.subwords'
     with open(vocab_path, 'r', encoding='utf-8') as f:
@@ -45,29 +48,33 @@ class Preprocessor:
       f.write('\n')
     os.remove(vocab_path)
 
+    # 시작토큰, 종료토큰 정의
     self.START_TOKEN, self.END_TOKEN = [self.tokenizer.vocab_size], [self.tokenizer.vocab_size + 1]
     # print('get_tokenizer: return(self.tokenizer) > ', self.tokenizer)
 
     return self.tokenizer
 
   def tokenize_and_filter(self, inputs, outputs, tokenizer):
-    tokenized_inputs, tokenized_outputs = [], []
+    # 전처리
+    inputs = self.seperate_punctuation_train(inputs)
+    outputs = self.seperate_punctuation_train(outputs)
+    encoded_inputs, encoded_outputs = [], []
     self.tokenizer = tokenizer
     for (sentence1, sentence2) in zip(inputs, outputs):
       # encode(토큰화 + 정수 인코딩), 시작 토큰과 종료 토큰 추가
       sentence1 = self.START_TOKEN + self.tokenizer.encode(sentence1) + self.END_TOKEN
       sentence2 = self.START_TOKEN + self.tokenizer.encode(sentence2) + self.END_TOKEN
 
-      tokenized_inputs.append(sentence1)
-      tokenized_outputs.append(sentence2)
+      encoded_inputs.append(sentence1)
+      encoded_outputs.append(sentence2)
 
     # 패딩
-    tokenized_inputs = tf.keras.preprocessing.sequence.pad_sequences(
-      tokenized_inputs, maxlen=self.MAX_LENGTH, padding='post')
-    tokenized_outputs = tf.keras.preprocessing.sequence.pad_sequences(
-      tokenized_outputs, maxlen=self.MAX_LENGTH, padding='post')
+    encoded_inputs = tf.keras.preprocessing.sequence.pad_sequences(
+      encoded_inputs, maxlen=self.MAX_LENGTH, padding='post')
+    encoded_outputs = tf.keras.preprocessing.sequence.pad_sequences(
+      encoded_outputs, maxlen=self.MAX_LENGTH, padding='post')
 
-    return tokenized_inputs, tokenized_outputs
+    return encoded_inputs, encoded_outputs
 
   def get_train_dataset(self, questions, answers, batch_size=128, buffer_size=20000):
     dataset = tf.data.Dataset.from_tensor_slices((
