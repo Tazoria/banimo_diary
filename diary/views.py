@@ -9,7 +9,7 @@ from models.transformer.transformer import transformer
 from models.transformer.evaluate import Evaluate
 import pandas as pd
 import random
-import itertools
+
 # import re
 def get_bani_names(num_comments):
   banies = ['검은바니', '흰 바니', '분홍 바니', '무지개 바니', '노랑 바니',
@@ -62,17 +62,17 @@ def get_bani_acts():
 
 def get_comment(content):
   # 저장된 트랜스포머 모델의 가중치를 적용하기 위해 단어사전과 모델 가중치의 경로 불러오기
-  vocab_path = 'models/transformer/vocab_32000.txt'
-  model_path = 'models/save/weights/transformer_weight_vocab_31960_layers_4_epochs_110.h5'
+  vocab_path = 'models/transformer/vocab_8192.txt'
+  model_path = 'models/save/weights/transformer_weight150.h5'
 
   tokenizer = load_tokenizer(vocab_path)  # 토크나이저 생성
 
   model = transformer(vocab_size=tokenizer.vocab_size + 2,  # 단순 모델 정의
-                      num_layers=4,
+                      num_layers=2,
                       dff=512,
                       d_model=256,
                       num_heads=8,
-                      dropout=.2)
+                      dropout=.1)
   model.load_weights(model_path)  # 가중치 불러오기
 
   # 입력 받은 문단을 문장으로 자르기
