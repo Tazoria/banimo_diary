@@ -51,7 +51,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             'templates',
-          'templates/accounts',
+            'templates/accounts',
             'templates/diary'
         ],
         'APP_DIRS': True,
