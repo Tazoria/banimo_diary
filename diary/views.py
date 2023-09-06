@@ -1,15 +1,14 @@
-import time
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from diary.models import Diary
 from diary.forms import DiaryForm
 from models.utils.load_tokenizer import load_tokenizer
-from models.transformer.transformer import transformer
-from models.transformer.evaluate import Evaluate
+from models.keras.transformer.transformer import transformer
+from models.keras.transformer import Evaluate
 import pandas as pd
 import random
-import itertools
+
+
 # import re
 def get_bani_names(num_comments):
   banies = ['검은바니', '흰 바니', '분홍 바니', '무지개 바니', '노랑 바니',
@@ -63,7 +62,7 @@ def get_bani_acts():
 def get_comment(content):
   # 저장된 트랜스포머 모델의 가중치를 적용하기 위해 단어사전과 모델 가중치의 경로 불러오기
   vocab_path = 'models/transformer/vocab.txt'
-  model_path = r'D:\banimo_diary\models\save\weights\transformer_weight150.h5'
+  model_path = r'/models/keras/save\weights\transformer_weight150.h5'
 
   tokenizer = load_tokenizer(vocab_path)  # 토크나이저 생성
 

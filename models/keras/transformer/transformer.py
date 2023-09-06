@@ -3,14 +3,19 @@ import tensorflow as tf
 
 
 class PositionalEncoding(tf.keras.layers.Layer):
+  # position: 시퀀스의 최대 위치 정보 = 시퀀스의 길이
+  # d_model: 임베딩 벡터 차원수
   def __init__(self, position, d_model):
     super(PositionalEncoding, self).__init__()
     self.pos_encoding = self.positional_encoding(position, d_model)
 
+  # i: 임베딩 벡터 내 위치
+  # 10000: Transformer에서 사용된 값이며 각 위치값이 시퀀스 길이나 입력값에 관계없이 동일한 위치값을 가질 수만 있으면 변경될 수 있음(진동수 조절역할)
   def get_angles(self, position, i, d_model):
     angles = 1 / tf.pow(10000, (2 * (i // 2)) / tf.cast(d_model, tf.float32))
     return position * angles
 
+  # 각 위치 및 차원에 대한 각도를 계산
   def positional_encoding(self, position, d_model):
     angle_rads = self.get_angles(
         position=tf.range(position, dtype=tf.float32)[:, tf.newaxis],

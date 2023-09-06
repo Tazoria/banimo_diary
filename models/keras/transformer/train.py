@@ -1,5 +1,5 @@
 import tensorflow as tf
-from models.transformer.transformer import transformer
+from models.keras.transformer.transformer import transformer
 
 
 class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):

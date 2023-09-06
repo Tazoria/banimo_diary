@@ -1,4 +1,4 @@
-from models.transformer import transformer
+from models.keras.transformer import transformer
 from models.utils.load_tokenizer import load_tokenizer
 import tensorflow as tf
 import re

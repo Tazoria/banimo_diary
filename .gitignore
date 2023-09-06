@@ -6,12 +6,13 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-models/checkpoints/
+models/keras/checkpoints/
 models/data/
 .idea
 __pycache__/
-models/save/weights/transformer_weight420.h5
-models/save/weights/transformer_weight_vocab_31960_layers_8_epochs_40.h5
-models/save/weights/transformer_weight_vocab_31960_layers_4_epochs_110.h5
-/models/transformer/test/
-models/save/weights/transformer_weight_vocab_31960_layers_4_epochs_120.h5
+models/keras/save/weights/transformer_weight420.h5
+models/keras/save/weights/transformer_weight_vocab_31960_layers_8_epochs_40.h5
+models/keras/save/weights/transformer_weight_vocab_31960_layers_4_epochs_110.h5
+/models/keras/transformer/test/
+models/keras/save/weights/transformer_weight_vocab_31960_layers_4_epochs_120.h5
+models/keras/save/weights/transformer_weight150.h5
