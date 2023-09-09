@@ -1,7 +1,7 @@
 import tensorflow_datasets as tfds
 
 
-def load_tokenizer(vocab_path):
+def load_tokenizer(vocab_path=''):
   corpus = []
 
   with open(vocab_path, 'r', encoding='utf-8') as f:

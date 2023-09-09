@@ -151,8 +151,7 @@ def create_padding_mask(x):
   return mask[:, tf.newaxis, tf.newaxis, :]
 
 
-def encoder_layer(dff, d_model, num_heads, dropout, name="encoder_layer"):
-  inputs = tf.keras.Input(shape=(None, d_model), name="inputs")
+inputs = tf.keras.Input(shape=(None, d_model), name="inputs")
 
   # 인코더는 패딩 마스크 사용
   padding_mask = tf.keras.Input(shape=(1, 1, None), name="padding_mask")
